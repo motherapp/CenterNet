@@ -16,7 +16,7 @@ from external.nms import soft_nms
 from opts import opts
 from logger import Logger
 from utils.utils import AverageMeter
-from datasets.dataset_factory import dataset_factory
+from datasets.dataset_factory import get_dataset
 from detectors.detector_factory import detector_factory
 
 class PrefetchDataset(torch.utils.data.Dataset):
@@ -47,7 +47,7 @@ class PrefetchDataset(torch.utils.data.Dataset):
 def prefetch_test(opt):
   os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpus_str
 
-  Dataset = dataset_factory[opt.dataset]
+  Dataset = get_dataset(opt.dataset, opt.task)
   opt = opts().update_dataset_info_and_set_heads(opt, Dataset)
   print(opt)
   Logger(opt)

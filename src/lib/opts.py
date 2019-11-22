@@ -357,6 +357,13 @@ class opts(object):
           self.__setattr__(k, v)
     opt = self.parse(args)
     dataset = Struct(default_dataset_info[opt.task])
+
+    if dataset.dataset != opt.dataset and opt.task=="ctdet":
+      from datasets.dataset_factory import get_dataset
+      Dataset = get_dataset(opt.dataset, "ctdet")
+      dataset = Dataset
+      dataset.dataset = opt.dataset
+
     opt.dataset = dataset.dataset
     opt = self.update_dataset_info_and_set_heads(opt, dataset)
     return opt

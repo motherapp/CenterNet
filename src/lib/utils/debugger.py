@@ -5,6 +5,8 @@ from __future__ import print_function
 import numpy as np
 import cv2
 from .ddd_utils import compute_box_3d, project_to_image, draw_box_3d
+from datasets.dataset_factory import get_dataset
+from opts import opts
 
 class Debugger(object):
   def __init__(self, ipynb=False, theme='black', 
@@ -62,6 +64,10 @@ class Debugger(object):
       self.focal_length = 721.5377
       self.W = 1242
       self.H = 375
+    else: # custom dataset
+      Dataset = get_dataset(dataset, "ctdet")
+      self.names = Dataset.class_name[1:]
+
     num_classes = len(self.names)
     self.down_ratio=down_ratio
     # for bird view

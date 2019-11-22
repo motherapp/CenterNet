@@ -11,7 +11,7 @@ from .dataset.coco import COCO
 from .dataset.pascal import PascalVOC
 from .dataset.kitti import KITTI
 from .dataset.coco_hp import COCOHP
-
+import importlib
 
 dataset_factory = {
   'coco': COCO,
@@ -29,7 +29,11 @@ _sample_factory = {
 
 
 def get_dataset(dataset, task):
-  class Dataset(dataset_factory[dataset], _sample_factory[task]):
+  dataset_class = dataset_factory.get(dataset, None)
+  if dataset_class is None:
+    dataset_class = importlib.import_module("lib.datasets.dataset." + dataset).CustomDataset 
+
+  class Dataset(dataset_class, _sample_factory[task]):
     pass
   return Dataset
   
